@@ -4,7 +4,8 @@
   "description": "Testing out the worst sorting algorithm I've ever seen",
   "main": "src/index.mjs",
   "scripts": {
-    "test": "vitest"
+    "test": "vitest",
+    "prettier": "prettier --write **/*.mjs"
   },
   "repository": {
     "type": "git",
@@ -22,5 +23,8 @@
   "devDependencies": {
     "prettier": "^3.4.2",
     "vitest": "^2.1.8"
+  },
+  "prettier": {
+    "singleQuote": true
   }
 }
