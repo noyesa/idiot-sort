@@ -9,13 +9,11 @@ time to time that goes something like this:
 
 ```js
 const nums = [1, 7, 2, 6, 3, 5, 4];
-function sort(nums) {
-  nums.forEach((num) => {
-    setTimeout(() => {
-      console.log(num);
-    }, num);
-  });
-}
+nums.forEach((num) => {
+  setTimeout(() => {
+    console.log(num);
+  }, num);
+});
 ```
 
 [(reference)](https://www.threads.net/@yernar.amergaliyev/post/DDlMG5si9sV?xmt=AQGzKNjcz9ppC1jHRx-6CGovv5buN0q3Q42sZrBIcACvGg)
