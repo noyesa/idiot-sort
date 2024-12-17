@@ -5,6 +5,9 @@
  */
 export async function idiotSort(nums) {
   const output = [];
+  if (!nums || nums.length === 0) {
+    return output;
+  }
   return new Promise((acc, rej) => {
     let expectedTimers = nums.length;
     nums.forEach((num) => {

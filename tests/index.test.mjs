@@ -6,4 +6,14 @@ describe("idiotSort", () => {
     const nums = [1, 7, 2, 6, 3, 5, 4];
     expect(idiotSort(nums)).resolves.toStrictEqual([1, 2, 3, 4, 5, 6, 7]);
   });
+
+  it("sorts already sorted input", () => {
+    const nums = [1, 2, 3, 4, 5, 6, 7];
+    expect(idiotSort(nums)).resolves.toStrictEqual([1, 2, 3, 4, 5, 6, 7]);
+  });
+
+  it("handles empty input", () => {
+    const nums = [];
+    expect(idiotSort(nums)).resolves.toStrictEqual([]);
+  });
 });
