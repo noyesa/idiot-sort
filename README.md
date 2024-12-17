@@ -18,6 +18,8 @@ function sort(nums) {
 }
 ```
 
+[(reference)](https://www.threads.net/@yernar.amergaliyev/post/DDlMG5si9sV?xmt=AQGzKNjcz9ppC1jHRx-6CGovv5buN0q3Q42sZrBIcACvGg)
+
 After some discussion recently about this, I decided to write this algorithm
 and build a testing framework to validate whether this always returns a sorted
 array. JavaScript timers are notoriously unreliable, and there is no guarantee
