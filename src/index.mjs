@@ -4,16 +4,22 @@
  * @returns {Promise<number[]>} A sorted copy of the input array.
  */
 export async function idiotSort(nums) {
-  const output = [];
-  if (!nums || nums.length === 0) {
-    return output;
+  const numsCount = nums?.length ?? 0;
+  if (numsCount === 0) {
+    return [];
   }
-  return new Promise((acc, rej) => {
-    let expectedTimers = nums.length;
+
+  const output = new Array(numsCount);
+  // Holds the index of the next number to be added to output.
+  let i = 0;
+
+  return new Promise((acc) => {
     nums.forEach((num) => {
       setTimeout(() => {
-        output.push(num);
-        if (--expectedTimers === 0) {
+        output[i++] = num;
+
+        // Once all the input numbers have been written to output, we're done.
+        if (i === numsCount) {
           acc(output);
         }
       }, num);
