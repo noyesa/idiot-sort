@@ -1,0 +1,19 @@
+{
+  "name": "idiot-sort",
+  "version": "1.0.0",
+  "description": "Testing out the worst sorting algorithm I've ever seen",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "vitest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/noyesa/idiot-sort.git"
+  },
+  "author": "Andrew Noyes <noyesa@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/noyesa/idiot-sort/issues"
+  },
+  "homepage": "https://github.com/noyesa/idiot-sort#readme"
+}
