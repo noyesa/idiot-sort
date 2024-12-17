@@ -13,7 +13,7 @@ describe("idiotSort", () => {
   });
 
   it("handles empty input", () => {
-    const nums = [];
-    expect(idiotSort(nums)).resolves.toStrictEqual([]);
+    expect(idiotSort()).resolves.toStrictEqual([]);
+    expect(idiotSort([])).resolves.toStrictEqual([]);
   });
 });
