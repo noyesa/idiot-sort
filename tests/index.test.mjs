@@ -7,7 +7,7 @@ describe('idiotSort', () => {
   });
 
   afterEach(() => {
-    vi.resetAllMocks();
+    vi.restoreAllMocks();
   });
 
   it('sorts the input array', async () => {
