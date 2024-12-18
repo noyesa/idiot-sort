@@ -1,4 +1,4 @@
-import { idiotSort } from '../src/index.mjs';
+import { idiotSort } from '../src/idiot-sort';
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 
 describe('idiotSort', () => {
