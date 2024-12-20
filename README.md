@@ -36,3 +36,7 @@ We know that these timers may not actually fire at 0ms, 10ms, or 20ms, but do
 they always fire in the correct order? I don't know the answer, and I think by
 running this repeatedly we should be able to see some rate of errors that would
 prove that this is non-deterministic.
+
+
+https://github.com/user-attachments/assets/88c02a78-948c-4dfa-a9fd-fc9b7b7474ee
+
