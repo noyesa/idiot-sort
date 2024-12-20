@@ -3,7 +3,7 @@ import { isOption, none } from 'option';
 import { CountingMachine } from '../src/test-runner.mjs';
 
 describe('CountingMachine', () => {
-  it('initializes state to all 0s', () => {
+  it('initializes state to all 0s by default', () => {
     const machine = new CountingMachine([2, 5, 7, 8]);
     expect(machine.counts).toStrictEqual([0, 0, 0, 0]);
   });
@@ -17,6 +17,12 @@ describe('CountingMachine', () => {
     it('is equal to the total number of unique machine states', () => {
       const machine = new CountingMachine([2, 3, 4, 5]);
       expect(machine.length).toBe(2 * 3 * 4 * 5);
+    });
+
+    it('correctly computes total when custom start is used', () => {
+      const machine = new CountingMachine([4, 5, 6, 7], 3);
+      expect(machine.counts).toStrictEqual([3, 3, 3, 3]);
+      expect(machine.length).toBe(1 * 2 * 3 * 4);
     });
   });
 
@@ -63,6 +69,13 @@ describe('CountingMachine', () => {
       machine.reset();
       expect(machine.counts).toStrictEqual([0, 0]);
       expect(machine.next().isSome()).toBe(true);
+    });
+
+    it('uses custom start value if provided', () => {
+      const machine = new CountingMachine([5, 5], 3);
+      expect(machine.next().value()).toStrictEqual([3, 4]);
+      machine.reset();
+      expect(machine.counts).toStrictEqual([3, 3]);
     });
   });
 });

@@ -45,7 +45,7 @@ export class CountingMachine {
     return this.#length.valueOrElse(() => {
       // Compute the length only once.
       const length = this.#params.reduce(
-        (product, param) => product * param,
+        (product, param) => product * (param - this.#start),
         1,
       );
       this.#length = some(length);
