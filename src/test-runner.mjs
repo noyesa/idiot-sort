@@ -38,6 +38,12 @@ export class CountingMachine {
   #isDone = false;
 
   /**
+   * Number of iterations that have been completed.
+   * @type {number}
+   */
+  #iterationCount = 1;
+
+  /**
    * The total number of unique states possible.
    * @type {number}
    */
@@ -62,6 +68,14 @@ export class CountingMachine {
   }
 
   /**
+   * The number of iterations that have been returned.
+   * @type {number}
+   */
+  get iterationCount() {
+    return this.#iterationCount;
+  }
+
+  /**
    * Initialize the machine.
    * @param {number[]} params - The params to range over.
    * @param {number} [start=0] - Starting value of each counter.
@@ -80,6 +94,8 @@ export class CountingMachine {
     if (this.#isDone) {
       return none;
     }
+
+    ++this.#iterationCount;
 
     // Iterate RTL to find the least significant counter to increment.
     for (let i = this.#params.length - 1; i >= 0; --i) {
@@ -102,7 +118,24 @@ export class CountingMachine {
    * Resets the counter back to the initial state.
    */
   reset() {
+    this.#iterationCount = 1;
     this.#isDone = false;
     this.#counts = new Array(this.#params.length).fill(this.#start);
+  }
+
+  /**
+   * Calls the callback with every possible unique state of all parameters.
+   * @param {function} cb - The callback, receives current state as arguments.
+   */
+  forEach(cb) {
+    // Call with the initial state.
+    cb(...this.#counts);
+
+    // Iterate until we're done and pass each state to callback.
+    while (!this.#isDone) {
+      this.next().map((state) => {
+        cb(...state);
+      });
+    }
   }
 }

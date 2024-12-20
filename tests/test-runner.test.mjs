@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { isOption, none } from 'option';
 import { CountingMachine } from '../src/test-runner.mjs';
 
@@ -76,6 +76,40 @@ describe('CountingMachine', () => {
       expect(machine.next().value()).toStrictEqual([3, 4]);
       machine.reset();
       expect(machine.counts).toStrictEqual([3, 3]);
+    });
+  });
+
+  describe('iterationCount', () => {
+    it('counts the number of iterations', () => {
+      const machine = new CountingMachine([2, 2]);
+      // We are on the first iteration.
+      expect(machine.iterationCount).toBe(1);
+
+      machine.next();
+      machine.next();
+
+      expect(machine.iterationCount).toBe(3);
+    });
+
+    it('resets when the machine is reset', () => {
+      const machine = new CountingMachine([2, 2]);
+      machine.next();
+      expect(machine.iterationCount).toBe(2);
+      machine.reset();
+      expect(machine.iterationCount).toBe(1);
+    });
+  });
+
+  describe('forEach', () => {
+    it('invokes a callback with the parameter values for every possible combination of states', () => {
+      const fn = vi.fn();
+      const machine = new CountingMachine([2, 2]);
+      machine.forEach(fn);
+      expect(fn).toHaveBeenCalledTimes(4);
+      expect(fn).toHaveBeenCalledWith(0, 0);
+      expect(fn).toHaveBeenCalledWith(0, 1);
+      expect(fn).toHaveBeenCalledWith(1, 0);
+      expect(fn).toHaveBeenCalledWith(1, 1);
     });
   });
 });
