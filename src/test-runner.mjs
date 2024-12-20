@@ -60,6 +60,10 @@ export class CountingMachine {
     });
   }
 
+  /**
+   * Get the current count values.
+   * @type {number[]}
+   */
   get counts() {
     return Array.from(this.#counts);
   }
