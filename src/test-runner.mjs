@@ -25,24 +25,17 @@ export class CountingMachine {
   #counts;
 
   /**
-   * Has iteration of all the ranges specified completed?
-   * @type {boolean}
-   */
-  #isDone = false;
-
-  /**
    * Backing property that stores value for public length getter.
    * @type {option.Some|option.none}
    */
   #length = none;
 
   /**
-   * Has the machine iterated through all possible states?
+   * Indicates we have iterated through all possible states and this machine
+   * cannot be reused until reset is called.
    * @type {boolean}
    */
-  get isDone() {
-    return this.#isDone;
-  }
+  #isDone = false;
 
   /**
    * The total number of unique states possible.
@@ -85,20 +78,22 @@ export class CountingMachine {
    */
   next() {
     if (this.#isDone) {
-      throw new Error('attempted to iterate an already finished machine.');
+      return none;
     }
 
-    let i = this.#params.length - 1;
-    while (i >= 0) {
-      if (++this.#counts[i] < this.#params[i]) {
-        // Terminate if incremented a param that didn't roll over.
+    // Iterate RTL to find the least significant counter to increment.
+    for (let i = this.#params.length - 1; i >= 0; --i) {
+      ++this.#counts[i];
+      // Check if we went over the max.
+      if (this.#counts[i] < this.#params[i]) {
         return some(this.counts);
       } else {
         this.#counts[i] = 0;
       }
-      --i;
     }
 
+    // If the loop didn't return, it means all counters are at their max value
+    // meaning we have reached the terminal state.
     this.#isDone = true;
     return none;
   }
@@ -107,6 +102,7 @@ export class CountingMachine {
    * Resets the counter back to the initial state.
    */
   reset() {
+    this.#isDone = false;
     this.#counts = new Array(this.#params.length).fill(this.#start);
   }
 }

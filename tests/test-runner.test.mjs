@@ -1,11 +1,16 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect } from 'vitest';
+import { isOption, none } from 'option';
 import { CountingMachine } from '../src/test-runner.mjs';
-import { isOption } from 'option';
 
 describe('CountingMachine', () => {
   it('initializes state to all 0s', () => {
     const machine = new CountingMachine([2, 5, 7, 8]);
     expect(machine.counts).toStrictEqual([0, 0, 0, 0]);
+  });
+
+  it('initializes state to provided start value', () => {
+    const machine = new CountingMachine([2, 3], 1);
+    expect(machine.counts).toStrictEqual([1, 1]);
   });
 
   describe('length', () => {
@@ -15,46 +20,49 @@ describe('CountingMachine', () => {
     });
   });
 
-  it('counts a single scalar', () => {
-    const machine = new CountingMachine([3]);
-    expect(machine.counts).toStrictEqual([0]);
-    let next = machine.next();
-    expect(isOption(next)).toBe(true);
-    expect(next.isSome()).toBe(true);
-    expect(next.value()).toStrictEqual([1]);
-    expect(machine.isDone).toBe(false);
-
-    next = machine.next();
-    expect(next.isSome()).toBe(true);
-    expect(next.value()).toStrictEqual([2]);
-    expect(machine.isDone).toBe(false);
-
-    next = machine.next();
-    expect(isOption(next)).toBe(true);
-    expect(next.isNone()).toBe(true);
-    expect(machine.isDone).toBe(true);
-
-    // Error is thrown when attempting to continue iterating.
-    expect(() => {
+  describe('counts', () => {
+    it('returns the current state of the machine', () => {
+      const machine = new CountingMachine([2, 3, 4]);
+      expect(machine.counts).toStrictEqual([0, 0, 0]);
       machine.next();
-    }).toThrowError();
+      expect(machine.counts).toStrictEqual([0, 0, 1]);
+    });
   });
 
-  it('iterates multiple scalars', () => {
-    const machine = new CountingMachine([2, 3]);
-    const values = [machine.counts];
-    while (!machine.isDone) {
-      machine.next().map((counts) => {
-        values.push(counts);
-      });
-    }
-    expect(values).toStrictEqual([
-      [0, 0],
-      [0, 1],
-      [0, 2],
-      [1, 0],
-      [1, 1],
-      [1, 2],
-    ]);
+  describe('next', () => {
+    it('advances the counter to the next state', () => {
+      const machine = new CountingMachine([2, 2]);
+      expect(machine.counts).toStrictEqual([0, 0]);
+      const result = machine.next();
+      expect(isOption(result)).toBe(true);
+      expect(result.isSome()).toBe(true);
+      expect(result.value()).toStrictEqual([0, 1]);
+      expect(machine.next().value()).toStrictEqual([1, 0]);
+      expect(machine.next().value()).toStrictEqual([1, 1]);
+    });
+
+    it('returns none when iteration is complete', () => {
+      const machine = new CountingMachine([2, 2]);
+      // Advance the machine to its final state.
+      machine.next(); // [0, 1]
+      machine.next(); // [1, 0]
+      machine.next(); // [1, 1];
+      const result = machine.next();
+      expect(isOption(result)).toBe(true);
+      expect(result.isNone()).toBe(true);
+      expect(result).toBe(none);
+    });
+  });
+
+  describe('reset', () => {
+    it('sets a finished machine back to initial state', () => {
+      const machine = new CountingMachine([2, 2]);
+
+      // Advance until machine is in terminal state.
+      while (machine.next().isSome()) {}
+      machine.reset();
+      expect(machine.counts).toStrictEqual([0, 0]);
+      expect(machine.next().isSome()).toBe(true);
+    });
   });
 });
