@@ -1,3 +1,3 @@
-import { cli } from './cli.mjs';
+import { runExperiment } from './experiment.mjs';
 
-cli();
+runExperiment();
